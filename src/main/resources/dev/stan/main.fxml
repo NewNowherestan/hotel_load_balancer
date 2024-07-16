@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.MainController" spacing="10" alignment="CENTER">
+    <ScrollPane>
+        <HBox fx:id="gpioStatusBox" spacing="10" alignment="CENTER"/>
+    </ScrollPane>
+    <TextArea fx:id="logArea" editable="false" VBox.vgrow="ALWAYS"/>
+</VBox>
