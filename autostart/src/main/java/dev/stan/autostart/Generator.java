@@ -1,0 +1,89 @@
+package dev.stan.autostart;
+
+import static dev.stan.autostart.OutputPIns.*;
+import static dev.stan.autostart.PinState.*;
+
+public class Generator {
+
+    private static final long generatorCooldownDelaySecs = 10;
+
+    private final AppContext appContext;
+    private final Starter starter = new Starter();
+
+    private static final long gasValveOpenDelaySecs = 5;
+    private static long generatorCooldownStartedTimestampSecs = 0;
+    private static long gasValveOpenOnStarttimestampSecs = 0;
+
+    private final long starterPauseDelaySecs = 20;
+    private long starterPauseStartedTimestampSecs = 0;
+
+    public Generator(AppContext appContext) {
+        this.appContext = appContext;
+    }
+
+    // checked
+    public void startGenerator() {
+        System.out.println(", Start generator");
+
+
+        // if first attempt, let gas flow for a while
+        if (appContext.attempts == 0) {
+            gasValveOpenOnStarttimestampSecs = appContext.getSecs();
+        }
+
+        if (appContext.getSecs() - gasValveOpenOnStarttimestampSecs >= gasValveOpenDelaySecs) {
+            starter.runStarter();
+        }
+    }
+
+    // checked
+    public void stopGenerator() {
+        System.out.println(", Stop generator");
+
+        if (generatorCooldownStartedTimestampSecs == 0) {
+            generatorCooldownStartedTimestampSecs = appContext.getSecs();
+        }
+
+        if (appContext.getSecs() - generatorCooldownStartedTimestampSecs >= generatorCooldownDelaySecs) {
+            GAS_VALVE_RELAY.set(LOW);
+
+            appContext.isValveOpen = false;
+
+            generatorCooldownStartedTimestampSecs = 0;
+        }
+    }
+
+    public void stopStarter() {
+        starter.stopStarter();
+    }
+
+    class Starter {
+
+        private void runStarter() {
+            if (appContext.isGeneratorWorking)
+                return;
+
+            System.out.println(", Run starter");
+
+            if (!appContext.isStarterRunning
+                    && appContext.getSecs() - starterPauseStartedTimestampSecs >= starterPauseDelaySecs) {
+                STARTER_RELAY.set(HIGH);
+
+                starterEnabledTimestampSecs = appContext.getSecs();
+                appContext.isStarterRunning = true;
+            }
+        }
+
+        private void stopStarter() {
+            System.out.println(", Stop starter");
+
+            STARTER_RELAY.set(LOW);
+
+            starterEnabledTimestampSecs = 0;
+            gasValveOpenOnStarttimestampSecs = 0;
+
+            appContext.isStarterRunning = false;
+        }
+
+    }
+}

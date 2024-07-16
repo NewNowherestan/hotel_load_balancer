@@ -1,8 +1,9 @@
-package dev.stan;
+package dev.stan.autostart;
+
+import static dev.stan.autostart.PinState.*;
 
 import com.pi4j.context.Context;
 import com.pi4j.io.gpio.digital.DigitalOutput;
-import static dev.stan.PinState.*;
 
 public enum OutputPIns {
 
@@ -15,7 +16,7 @@ public enum OutputPIns {
 
     // implement lazy initialization
     OutputPIns(int address, PinState state) {
-        Context pi4j = Pi4JContext.getContext();
+        Context pi4j = AppContext.getContext().getPi4JContext();
 
         pin = pi4j.create(DigitalOutput.newConfigBuilder(pi4j)
                 .id(name())

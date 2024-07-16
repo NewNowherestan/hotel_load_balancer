@@ -1,4 +1,4 @@
-package dev.stan;
+package dev.stan.autostart;
 
 import com.pi4j.io.gpio.digital.DigitalState;
 

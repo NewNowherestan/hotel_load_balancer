@@ -1,4 +1,4 @@
-package dev.stan;
+package dev.stan.gui;
 
 import java.io.IOException;
 import javafx.fxml.FXML;

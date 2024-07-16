@@ -1,4 +1,4 @@
-package dev.stan;
+package dev.stan.autostart;
 
 import com.pi4j.context.Context;
 import com.pi4j.io.gpio.digital.DigitalInput;
@@ -10,7 +10,7 @@ public enum InputPins {
         private final DigitalInput pin;
 
         InputPins(int address) {
-                Context pi4j = Pi4JContext.getContext();
+                Context pi4j = AppContext.getContext().getPi4JContext();
 
                 pin = pi4j.create(DigitalInput.newConfigBuilder(pi4j)
                                 .id(name())
