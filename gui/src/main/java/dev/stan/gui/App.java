@@ -8,13 +8,16 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 
 /**
  * JavaFX App
  */
 public class App extends Application {
-
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
     private static Scene scene;
 
     public static void main(String[] args) {
@@ -35,6 +38,9 @@ public class App extends Application {
 
     private static Parent loadFXML(String fxml) throws IOException {
         var resource = App.class.getResource("fxml/" + fxml + ".fxml");
+
+        logger.info("Loading FXML: " + resource);
+
         Parent res = FXMLLoader.load(resource);
 
         return res;

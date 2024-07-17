@@ -15,7 +15,10 @@ public class Generator {
     private static long gasValveOpenOnStarttimestampSecs = 0;
 
     private final long starterPauseDelaySecs = 20;
+    private static final long starterActiveDelaySecs = 10;
+
     private long starterPauseStartedTimestampSecs = 0;
+    private static long starterEnabledTimestampSecs = 0;
 
     public Generator(AppContext appContext) {
         this.appContext = appContext;
@@ -57,7 +60,37 @@ public class Generator {
         starter.stopStarter();
     }
 
+    public void checkStarter() {
+        starter.check();
+    }
+
     class Starter {
+
+        public void check() {
+            if (!appContext.isStarterRunning) {
+                return;
+            }
+
+            if (appContext.isMainsPresent) {
+                starter.stopStarter();
+                appContext.attempts = 0;
+                enableValve(false);
+            }
+
+            if (appContext.isGeneratorWorking) {
+                System.out.println(", Generator started");
+                starter.stopStarter();
+                appContext.attempts = 0;
+                powerValveFromBattery(false);
+            } else if (appContext.getSecs() - starterEnabledTimestampSecs >= starterActiveDelaySecs) {
+                System.out.println(", Generator start failed");
+                starter.stopStarter();
+                appContext.attempts++;
+
+                enableValve(false);
+                starterPauseStartedTimestampSecs = appContext.getSecs();
+            }
+        }
 
         private void runStarter() {
             if (appContext.isGeneratorWorking)
@@ -85,5 +118,21 @@ public class Generator {
             appContext.isStarterRunning = false;
         }
 
+    }
+
+    //checked
+    public void enableValve(boolean isValveShouldBeOpen) {
+        appContext.isValveOpen = isValveShouldBeOpen;
+        GAS_VALVE_RELAY.set(isValveShouldBeOpen);
+
+        if (!appContext.isValveOpen) {
+            powerValveFromBattery(false);
+        }
+    }
+
+    //checked
+    public void powerValveFromBattery(boolean isValveShouldBePoweredFromBattery) {
+        appContext.isValveOnBattery = isValveShouldBePoweredFromBattery;
+        GAS_VALVE_POWER_SOURCE_SELECT.set(appContext.isValveOnBattery);
     }
 }

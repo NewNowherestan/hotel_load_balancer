@@ -3,6 +3,8 @@ module dev.stan.gui {
     requires javafx.fxml;
     requires javafx.graphics;
 
+    requires org.slf4j;
+
 
     exports dev.stan.gui;
     opens dev.stan.gui to javafx.fxml;

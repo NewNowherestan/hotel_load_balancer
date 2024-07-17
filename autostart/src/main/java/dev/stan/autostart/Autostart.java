@@ -12,9 +12,6 @@ public class Autostart {
     //constants
     private static final int debounceMsecs = 150;
     private static final int allowedAttempts = 4;
-    private static final long starterActiveDelaySecs = 10;
-    
-    private static long starterEnabledTimestampSecs = 0;
 
     private static long mainsInputValveChangedTimestampMsecs = 0;
     private static long genInputValueChangedTimestampMsecs = 0;
@@ -77,14 +74,14 @@ public class Autostart {
         appContext.updateTimestamps();
 
         checkStatus();
-        checkGenerator();
+        generator.checkStarter();
 
         //no mains, no generator -> start generator
         if (!appContext.isGeneratorWorking && !appContext.isMainsPresent) {
             if (appContext.attempts >= allowedAttempts) {
                 // open gas valve
-                powerValveFromBattery(true);
-                enableValve(true);
+                generator.powerValveFromBattery(true);
+                generator.enableValve(true);
 
                 generator.startGenerator();
             } else {
@@ -99,60 +96,20 @@ public class Autostart {
 
         //generator is not working, mains is present -> ensure that generator fully stopped
         if (!appContext.isGeneratorWorking && appContext.isMainsPresent) {
-            enableValve(false);
+            generator.enableValve(false);
 
             generator.stopStarter();
         }
 
         //generator is working, valve still powered from batterty -> power valve from generator
         if (appContext.isGeneratorWorking && appContext.isValveOnBattery) {
-            powerValveFromBattery(false);
+            generator.powerValveFromBattery(false);
         }
 
         powerSelect();
     }
 
-    private static void checkGenerator() {
-        if (!appContext.isStarterRunning) {
-           return;
-        }
 
-        if (appContext.isMainsPresent) {
-            generator.stopStarter();
-            appContext.attempts = 0;
-            enableValve(false);
-        }
-
-        if (appContext.isGeneratorWorking) {
-            System.out.println(", Generator started");
-            generator.stopStarter();
-            appContext.attempts = 0;
-            powerValveFromBattery(false);
-        } else if (appContext.getSecs() - starterEnabledTimestampSecs >= starterActiveDelaySecs) {
-            System.out.println(", Generator start failed");
-            generator.stopStarter();
-            appContext.attempts++;
-
-            enableValve(false);
-            starterPauseStartedTimestampSecs = appContext.getSecs();
-        }
-    }
-
-    //checked
-    private static void enableValve(boolean isValveShouldBeOpen) {
-        appContext.isValveOpen = isValveShouldBeOpen;
-        GAS_VALVE_RELAY.set(isValveShouldBeOpen);
-
-        if (!appContext.isValveOpen) {
-            powerValveFromBattery(false);
-        }
-    }
-
-    //checked
-    private static void powerValveFromBattery(boolean isValveShouldBePoweredFromBattery) {
-        appContext.isValveOnBattery = isValveShouldBePoweredFromBattery;
-        GAS_VALVE_POWER_SOURCE_SELECT.set(appContext.isValveOnBattery);
-    }
 
     //checked
     private static void powerSelect() {
