@@ -4,6 +4,7 @@ module dev.stan.gui {
     requires javafx.graphics;
 
     requires org.slf4j;
+    requires dev.stan.logging;
 
 
     exports dev.stan.gui;

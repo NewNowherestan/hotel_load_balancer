@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.stan.gui.SimpleController">
+   <children>
+      <HBox prefHeight="123.0" prefWidth="1080.0">
+         <children>
+            <StackPane>
+               <children>
+                  <ImageView fitHeight="392.0" fitWidth="407.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../../../../../Downloads/IMG_1614.JPG" />
+                     </image>
+                  </ImageView>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="sysParamsTableView" opacity="0.76" prefHeight="392.0" prefWidth="150.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="VAR" />
+                            <TableColumn prefWidth="75.19999999999999" text="VAL" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </HBox>
+               </children>
+            </StackPane>
+            <TableView fx:id="pinsTableView" prefHeight="392.0" prefWidth="302.0">
+              <columns>
+                  <TableColumn prefWidth="53.60005110502243" text="Pin #" />
+                <TableColumn prefWidth="92.79999160766602" text="Function" />
+                  <TableColumn prefWidth="155.1999969482422" text="Status" />
+              </columns>
+            </TableView>
+            <LineChart fx:id="lineChart">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </LineChart>
+         </children>
+      </HBox>
+      <TextArea fx:id="statusTextArea" prefHeight="50.0" prefWidth="1080.0" />
+      <TextArea id="logTextArea" fx:id="logTextArea" editable="false" onMouseClicked="#onClick" prefHeight="300.0" prefWidth="1080.0" text="08:11:00.800 [main] INFO  dev.stan.Main - -----------------------------------&#10;08:11:00.803 [main] INFO  dev.stan.Main - Starting application&#10;08:11:00.803 [main] INFO  dev.stan.Main - Hello, World!&#10;08:11:01.282 [JavaFX Application Thread] INFO  dev.stan.gui.App - Loading FXML: file:/C:/Users/Bohemoth/Documents/Projects/hotel_load_balancer/gui/target/classes/dev/stan/gui/fxml/primary.fxml&#10;08:11:07.783 [JavaFX Application Thread] INFO  dev.stan.gui.App - Loading FXML: file:/C:/Users/Bohemoth/Documents/Projects/hotel_load_balancer/gui/target/classes/dev/stan/gui/fxml/secondary.fxml&#10;08:11:09.890 [JavaFX Application Thread] INFO  dev.stan.gui.App - Loading FXML: file:/C:/Users/Bohemoth/Documents/Projects/hotel_load_balancer/gui/target/classes/dev/stan/gui/fxml/primary.fxml&#10;08:11:10.239 [JavaFX Application Thread] INFO  dev.stan.gui.App - Loading FXML: file:/C:/Users/Bohemoth/Documents/Projects/hotel_load_balancer/gui/target/classes/dev/stan/gui/fxml/secondary.fxml&#10;" wrapText="true" />
+   </children>
+</VBox>
