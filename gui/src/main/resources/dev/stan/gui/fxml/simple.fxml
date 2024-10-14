@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.stan.gui.SimpleController">
    <children>
       <HBox prefHeight="123.0" prefWidth="1080.0">
@@ -21,7 +20,7 @@
                <children>
                   <ImageView fitHeight="392.0" fitWidth="407.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../../../../../../Downloads/IMG_1614.JPG" />
+                        <Image url="@../IMG_1614.JPG" />
                      </image>
                   </ImageView>
                   <HBox prefHeight="100.0" prefWidth="200.0">
