@@ -1,8 +1,13 @@
 package dev.stan.autostart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static dev.stan.autostart.InputPins.*;
 import static dev.stan.autostart.OutputPIns.*;
 
 public class Autostart {
+
+    private static final Logger logger = LoggerFactory.getLogger(Autostart.class);
 
     //outputs - indicators
     // private static DigitalOutput genPowerIndicatorPin;
@@ -101,7 +106,7 @@ public class Autostart {
 
                 generator.startGenerator();
             } else {
-                System.out.println(", Generator start attempts limit reached");
+                logger.error("Generator start attempts limit reached");
             }
         }
 

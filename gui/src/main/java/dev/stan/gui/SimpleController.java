@@ -1,6 +1,5 @@
 package dev.stan.gui;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,9 +31,53 @@ public class SimpleController {
 
     public void appendLogMessage(String message) {
         Platform.runLater(() -> {
-            logTextArea.appendText(message + "\n");
+            String lastLine = getLastLine(logTextArea);
+            String messageWithoutTimestamp = strip(message);
+            String lastLineWithoutTimestamp = strip(lastLine);
+
+            if (lastLineWithoutTimestamp.equals(messageWithoutTimestamp)) {
+                String updatedLine = incrementCount(lastLine);
+                replaceLastLine(logTextArea, updatedLine);
+            } else {
+                logTextArea.appendText(message);
+            }
             limitLines(logTextArea, 50);
         });
+    }
+
+    private String getLastLine(TextArea textArea) {
+        int lastLineIndex = textArea.getParagraphs().size() - 2;
+        if (lastLineIndex >= 0) {
+            return textArea.getParagraphs().get(lastLineIndex).toString();
+        }
+        return "";
+    }
+
+    private String strip(String message) {
+        return message.replaceFirst("^\\d{2}:\\d{2}:\\d{2}\\.\\d{3} \\[.*?\\] ", "")
+                .replaceFirst(" \\(x\\d+\\)$", "")
+                .trim();
+    }
+
+    private String incrementCount(String line) {
+        if (line.endsWith(")")) {
+            int startIndex = line.lastIndexOf("(x") + 2;
+            int endIndex = line.lastIndexOf(")");
+            int count = Integer.parseInt(line.substring(startIndex, endIndex));
+            count++;
+            return line.substring(0, startIndex - 2) + "(x" + count + ")";
+        } else {
+            return line + " (x2)";
+        }
+    }
+
+    private void replaceLastLine(TextArea textArea, String newLine) {
+        int lastLineIndex = textArea.getParagraphs().size() - 1;
+        if (lastLineIndex >= 0) {
+            String text = textArea.getText();
+            int start = text.lastIndexOf('\n', text.length() - 2) + 1;
+            textArea.replaceText(start, text.length(), newLine + "\n");
+        }
     }
 
     private void limitLines(TextArea textArea, int maxLines) {
@@ -50,5 +93,4 @@ public class SimpleController {
             textArea.positionCaret(textArea.getLength());
         }
     }
-
 }

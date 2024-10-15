@@ -1,9 +1,13 @@
 package dev.stan.autostart;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static dev.stan.autostart.OutputPIns.*;
 import static dev.stan.autostart.PinState.*;
 
 public class Generator {
+    private static final Logger logger = LoggerFactory.getLogger(Generator.class);
 
     private static final long generatorCooldownDelaySecs = 10;
 
@@ -26,7 +30,7 @@ public class Generator {
 
     // checked
     public void startGenerator() {
-        System.out.println(", Start generator");
+        logger.info("Starting generator");
 
 
         // if first attempt, let gas flow for a while
@@ -41,7 +45,7 @@ public class Generator {
 
     // checked
     public void stopGenerator() {
-        System.out.println(", Stop generator");
+        logger.info("Stopping generator");
 
         if (generatorCooldownStartedTimestampSecs == 0) {
             generatorCooldownStartedTimestampSecs = appContext.getSecs();
@@ -78,12 +82,14 @@ public class Generator {
             }
 
             if (appContext.isGeneratorWorking) {
-                System.out.println(", Generator started");
+                logger.info("Generator started");
+
                 starter.stopStarter();
                 appContext.attempts = 0;
                 powerValveFromBattery(false);
             } else if (appContext.getSecs() - starterEnabledTimestampSecs >= starterActiveDelaySecs) {
-                System.out.println(", Generator start failed");
+                logger.error("Generator start failed");
+
                 starter.stopStarter();
                 appContext.attempts++;
 
@@ -96,7 +102,7 @@ public class Generator {
             if (appContext.isGeneratorWorking)
                 return;
 
-            System.out.println(", Run starter");
+            logger.info("Running starter");
 
             if (!appContext.isStarterRunning
                     && appContext.getSecs() - starterPauseStartedTimestampSecs >= starterPauseDelaySecs) {
@@ -108,7 +114,7 @@ public class Generator {
         }
 
         private void stopStarter() {
-            System.out.println(", Stop starter");
+            logger.info("Stopping starter");
 
             STARTER_RELAY.set(LOW);
 
