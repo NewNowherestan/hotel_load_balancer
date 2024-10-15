@@ -13,10 +13,13 @@ import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.layout.PatternLayout;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Plugin(name = "LambdaAppender", category = Core.CATEGORY_NAME, elementType = Appender.ELEMENT_TYPE, printObject = true)
 public class LambdaAppender extends AbstractAppender {
     private static final ConcurrentHashMap<String, Consumer<String>> consumers = new ConcurrentHashMap<>();
+    private static final Logger logger = LoggerFactory.getLogger(LambdaAppender.class);
 
     protected LambdaAppender(String name, Filter filter, Layout<? extends Serializable> layout, boolean ignoreExceptions,
                              Property[] properties) {

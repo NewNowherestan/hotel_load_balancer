@@ -24,7 +24,7 @@ public enum OutputPIns {
                 .address(address)
                 .initial(state.getValue())
                 .shutdown(state.getValue())
-                .provider("pigpio-digital-output"));
+                .build());
 
     }
 

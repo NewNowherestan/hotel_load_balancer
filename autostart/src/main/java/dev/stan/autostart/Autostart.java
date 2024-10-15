@@ -1,7 +1,6 @@
 package dev.stan.autostart;
 import static dev.stan.autostart.InputPins.*;
 import static dev.stan.autostart.OutputPIns.*;
-import static dev.stan.autostart.PinState.*;
 
 public class Autostart {
 
@@ -20,18 +19,35 @@ public class Autostart {
 
 
     private final static AppContext appContext = AppContext.getContext();
-    private final static Generator generator = new Generator(appContext);   
+    private final static Generator generator = new Generator(appContext);
+    private static Thread thread;
 
     public static void main(String[] args) {
-        // Main loop
-        while (true) {
-            loop();
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        start();
+    }
+
+    public static AppContext start() {
+
+        if (thread == null) {
+            System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "INFO");
+
+            Runnable task = () -> {
+                // Main loop
+                while (true) {
+                    loop();
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            thread = new Thread(task);
+            thread.start();
         }
+
+        return appContext;
     }
 
     private static void checkStatus() {

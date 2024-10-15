@@ -4,7 +4,6 @@ package dev.stan.gui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dev.stan.logging.LambdaAppender;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -24,9 +23,6 @@ public class SimpleController {
     @FXML
     private void initialize() {
         logTextArea.clear();
-        LambdaAppender.registerConsumer("gui", message -> {
-            Platform.runLater(() -> appendLogMessage(logTextArea, message + "\n"));
-        });
     }
 
     @FXML
@@ -34,9 +30,11 @@ public class SimpleController {
         logger.info("Button clicked", event);
     }
 
-    private void appendLogMessage(TextArea textArea, String message) {
-        textArea.appendText(message);
-        limitLines(textArea, 50);
+    public void appendLogMessage(String message) {
+        Platform.runLater(() -> {
+            logTextArea.appendText(message + "\n");
+            limitLines(logTextArea, 50);
+        });
     }
 
     private void limitLines(TextArea textArea, int maxLines) {

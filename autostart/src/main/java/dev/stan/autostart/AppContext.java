@@ -32,7 +32,7 @@ public class AppContext {
 
     public static AppContext getContext() {
         if (context == null) {
-            context = new AppContext(Pi4J.newAutoContext());
+            context = new AppContext(Pi4J.newAutoContextAllowMocks());
         }
 
         return context;

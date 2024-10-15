@@ -16,7 +16,7 @@ public enum InputPins {
                                 .id(name())
                                 .name(name() + " Pin")
                                 .address(address)
-                                .provider("pigpio-digital-input"));
+                                .build());
 
         }
 

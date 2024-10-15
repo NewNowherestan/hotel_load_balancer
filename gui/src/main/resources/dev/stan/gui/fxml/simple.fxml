@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.stan.gui.SimpleController">
+<VBox prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.stan.gui.SimpleController">
    <children>
       <HBox prefHeight="123.0" prefWidth="1080.0">
          <children>
@@ -53,6 +53,6 @@
          </children>
       </HBox>
       <TextArea fx:id="statusTextArea" prefHeight="50.0" prefWidth="1080.0" />
-      <TextArea id="logTextArea" fx:id="logTextArea" editable="false" onMouseClicked="#onClick" prefHeight="300.0" prefWidth="1080.0" text="08:11:00.800 [main] INFO  dev.stan.Main - -----------------------------------&#10;08:11:00.803 [main] INFO  dev.stan.Main - Starting application&#10;08:11:00.803 [main] INFO  dev.stan.Main - Hello, World!&#10;08:11:01.282 [JavaFX Application Thread] INFO  dev.stan.gui.App - Loading FXML: file:/C:/Users/Bohemoth/Documents/Projects/hotel_load_balancer/gui/target/classes/dev/stan/gui/fxml/primary.fxml&#10;08:11:07.783 [JavaFX Application Thread] INFO  dev.stan.gui.App - Loading FXML: file:/C:/Users/Bohemoth/Documents/Projects/hotel_load_balancer/gui/target/classes/dev/stan/gui/fxml/secondary.fxml&#10;08:11:09.890 [JavaFX Application Thread] INFO  dev.stan.gui.App - Loading FXML: file:/C:/Users/Bohemoth/Documents/Projects/hotel_load_balancer/gui/target/classes/dev/stan/gui/fxml/primary.fxml&#10;08:11:10.239 [JavaFX Application Thread] INFO  dev.stan.gui.App - Loading FXML: file:/C:/Users/Bohemoth/Documents/Projects/hotel_load_balancer/gui/target/classes/dev/stan/gui/fxml/secondary.fxml&#10;" wrapText="true" />
+      <TextArea id="logTextArea" fx:id="logTextArea" editable="false" onMouseClicked="#onClick" prefHeight="300.0" prefWidth="1080.0" text="08:11:00.800 [main] INFO  dev.stan.Main - -----------------------------------&#10;08:11:00.803 [main] INFO  dev.stan.Main - Starting application&#10;08:11:00.803 [main] INFO  dev.stan.Main - Hello, World!&#10;08:11:01.282 [JavaFX Application Thread] INFO  dev.stan.gui.Gui - Loading FXML: file:/C:/Users/Bohemoth/Documents/Projects/hotel_load_balancer/gui/target/classes/dev/stan/gui/fxml/primary.fxml&#10;08:11:07.783 [JavaFX Application Thread] INFO  dev.stan.gui.Gui - Loading FXML: file:/C:/Users/Bohemoth/Documents/Projects/hotel_load_balancer/gui/target/classes/dev/stan/gui/fxml/secondary.fxml&#10;08:11:09.890 [JavaFX Application Thread] INFO  dev.stan.gui.Gui - Loading FXML: file:/C:/Users/Bohemoth/Documents/Projects/hotel_load_balancer/gui/target/classes/dev/stan/gui/fxml/primary.fxml&#10;08:11:10.239 [JavaFX Application Thread] INFO  dev.stan.gui.Gui - Loading FXML: file:/C:/Users/Bohemoth/Documents/Projects/hotel_load_balancer/gui/target/classes/dev/stan/gui/fxml/secondary.fxml&#10;" wrapText="true" />
    </children>
 </VBox>
