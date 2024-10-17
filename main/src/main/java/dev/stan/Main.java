@@ -8,8 +8,6 @@ import dev.stan.autostart.Autostart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-
 import static java.lang.Thread.sleep;
 
 
@@ -34,6 +32,7 @@ public class Main {
         sleep(2000);
 
 
+        Gui.updateSysParams(context.getSysParams());
         Gui.plotIO(context.getIO());
 
 

@@ -28,6 +28,7 @@ public class Gui extends Application {
         new Thread(Application::launch).start();
     }
 
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = loadFXML("status");
@@ -54,6 +55,13 @@ public class Gui extends Application {
         }
     }
 
+    public static void updateSysParams(List<String[]> statusParams) {
+        if (controller != null) {
+            controller.updateSysParams(statusParams);
+
+        }
+
+    }
 
     private static FXMLLoader loadFXML(String fxml) throws IOException {
         FXMLLoader loader = new FXMLLoader(Gui.class.getResource("fxml/" + fxml + ".fxml"));

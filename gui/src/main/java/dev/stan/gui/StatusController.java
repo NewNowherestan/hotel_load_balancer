@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 
@@ -20,7 +19,7 @@ public class StatusController {
 
     @FXML private TextArea logTextArea;
     @FXML private TextArea statusTextArea;
-    @FXML private TableView<String> sysParamsableView;
+    @FXML private ListView<String> sysParamsListView;
     @FXML private ListView<String> ioListView;
     @FXML private LineChart<String, Number> chart;
 
@@ -45,6 +44,18 @@ public class StatusController {
             }
             ioListView.setItems(items);
 
+        });
+    }
+
+    public void updateSysParams(List<String[]> statusParams) {
+        Platform.runLater(() -> {
+            sysParamsListView.getItems().clear();
+            ObservableList<String> items = FXCollections.observableArrayList();
+
+            for (String[] statusParam : statusParams) {
+                items.add(statusParam[1] + "\t -\t" + statusParam[0]);
+            }
+            sysParamsListView.setItems(items);
         });
     }
 
@@ -112,4 +123,5 @@ public class StatusController {
             textArea.positionCaret(textArea.getLength());
         }
     }
+
 }

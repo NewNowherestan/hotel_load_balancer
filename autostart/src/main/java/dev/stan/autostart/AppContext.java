@@ -59,6 +59,18 @@ public class AppContext {
         return msecs;
     }
 
+    public List<String[]> getSysParams() {
+        List<String[]> sysParams = new ArrayList<>();
+        sysParams.add(new String[]{"Starter running", String.valueOf(isStarterRunning)});
+        sysParams.add(new String[]{"Generator working", String.valueOf(isGeneratorWorking)});
+        sysParams.add(new String[]{"Mains present", String.valueOf(isMainsPresent)});
+        sysParams.add(new String[]{"Valve open", String.valueOf(isValveOpen)});
+        sysParams.add(new String[]{"Valve on battery", String.valueOf(isValveOnBattery)});
+        sysParams.add(new String[]{"Attempts", String.valueOf(attempts)});
+
+        return sysParams;
+    }
+
     public List<String[]> getIO() {
         Registry pi4JRegistry = pi4JContext.registry();
         Map io = pi4JRegistry.all();
