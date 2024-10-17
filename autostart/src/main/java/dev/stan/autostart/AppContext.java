@@ -83,7 +83,7 @@ public class AppContext {
                 ioList.add(new String[]{
                         "output",
                         String.valueOf(output.address()),
-                        String.valueOf(output.state()) == "LOW" ? "0" : "1",
+                        String.valueOf(output.state()) == "LOW" ? "LOW " : "HIGH",
                         (String) name
                 });
             } else if (v instanceof DigitalInput) {
@@ -91,7 +91,7 @@ public class AppContext {
                 ioList.add(new String[]{
                         "input",
                         String.valueOf(input.address()),
-                        String.valueOf(input.state()) == "LOW" ? "0" : "1",
+                        String.valueOf(input.state()) == "LOW" ? "LOW " : "HIGH",
                         (String) name
                 });
             }
