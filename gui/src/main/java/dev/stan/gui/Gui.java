@@ -1,6 +1,7 @@
 package dev.stan.gui;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -9,6 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 
+import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +39,12 @@ public class Gui extends Application {
         stage.show();
 
         controller = loader.getController();
+
+        // Add event handler for window close request
+        stage.setOnCloseRequest((WindowEvent event) -> {
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
     static void setRoot(String fxml) throws IOException {
