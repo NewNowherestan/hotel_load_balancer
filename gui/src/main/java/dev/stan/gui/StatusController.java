@@ -72,6 +72,9 @@ public class StatusController {
                 logTextArea.appendText(message);
             }
             limitLines(logTextArea, 50);
+
+            statusTextArea.clear();
+            statusTextArea.setText(message);
         });
     }
 

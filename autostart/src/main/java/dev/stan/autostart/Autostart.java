@@ -99,14 +99,14 @@ public class Autostart {
 
         //no mains, no generator -> start generator
         if (!appContext.isGeneratorWorking && !appContext.isMainsPresent) {
-            if (appContext.attempts >= allowedAttempts) {
+            if (appContext.attempts < allowedAttempts) {
                 // open gas valve
                 generator.powerValveFromBattery(true);
                 generator.enableValve(true);
 
                 generator.startGenerator();
             } else {
-                logger.error("Generator start attempts limit reached");
+                logger.error("Generator start attempts limit reached. Start attempts: " + appContext.attempts + " Limit: " + allowedAttempts);
             }
         }
 

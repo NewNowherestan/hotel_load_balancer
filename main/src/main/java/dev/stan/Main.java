@@ -8,6 +8,9 @@ import dev.stan.autostart.Autostart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import static java.lang.Thread.sleep;
 
 
@@ -18,23 +21,24 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         logger.info("-----------------------------------");
         logger.info("Starting application");
-        logger.info("Hello, World!");
-
         logger.info("Registering consumer");
         LambdaAppender.registerConsumer("gui", Gui::printLog);
 
         Gui.start();
-
-        sleep(2000);
-
+        sleep(300);
         AppContext context = Autostart.start();
+        Executors.newScheduledThreadPool(1)
+                .scheduleAtFixedRate(() -> {
+                    Gui.updateSysParams(context.getSysParams());
+                    Gui.plotIO(context.getIO());
+                }, 0, 1, TimeUnit.SECONDS);
 
-        sleep(2000);
 
-
-        Gui.updateSysParams(context.getSysParams());
-        Gui.plotIO(context.getIO());
-
+        Thread currentThread = Thread.currentThread();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            currentThread.interrupt();
+            logger.info("Application terminated by user.");
+        }));
 
         logger.info("Application Started");
         logger.info("Hello, World!");

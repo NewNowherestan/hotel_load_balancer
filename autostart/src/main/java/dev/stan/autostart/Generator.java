@@ -34,13 +34,16 @@ public class Generator {
 
 
         // if first attempt, let gas flow for a while
-        if (appContext.attempts == 0) {
+        if (appContext.attempts == 0 && gasValveOpenOnStarttimestampSecs == 0) {
             gasValveOpenOnStarttimestampSecs = appContext.getSecs();
         }
 
         if (appContext.getSecs() - gasValveOpenOnStarttimestampSecs >= gasValveOpenDelaySecs) {
             starter.runStarter();
+        } else {
+            logger.info("Waiting for gas to flow. Seconds left: " + (gasValveOpenDelaySecs - (appContext.getSecs() - gasValveOpenOnStarttimestampSecs)));
         }
+        starter.check();
     }
 
     // checked
@@ -95,22 +98,34 @@ public class Generator {
 
                 enableValve(false);
                 starterPauseStartedTimestampSecs = appContext.getSecs();
+
+                logger.info("Starting pause before next attempt. Seconds left: " + starterPauseDelaySecs);
             }
         }
 
         private void runStarter() {
-            if (appContext.isGeneratorWorking)
+            if (appContext.isGeneratorWorking) {
+                logger.info("Generator already started");
                 return;
+            }
 
             logger.info("Running starter");
 
-            if (!appContext.isStarterRunning
-                    && appContext.getSecs() - starterPauseStartedTimestampSecs >= starterPauseDelaySecs) {
+            if (appContext.isStarterRunning) {
+                logger.info("Starter started. Seconds to run: " + (starterActiveDelaySecs - (appContext.getSecs() - starterEnabledTimestampSecs)));
+
+            } else if (appContext.getSecs() - starterPauseStartedTimestampSecs >= starterPauseDelaySecs) {
                 STARTER_RELAY.set(HIGH);
 
                 starterEnabledTimestampSecs = appContext.getSecs();
                 appContext.isStarterRunning = true;
+
+                logger.info("Starter started");
+
+            } else {
+                logger.info("Waiting for starter cooldown to end. Seconds left: " + (starterPauseDelaySecs - (appContext.getSecs() - starterPauseStartedTimestampSecs)));
             }
+
         }
 
         private void stopStarter() {
