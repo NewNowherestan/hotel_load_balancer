@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,7 @@ import org.slf4j.LoggerFactory;
 public class Gui extends Application {
     private static final Logger logger = LoggerFactory.getLogger(Gui.class);
     private static Scene scene;
-    private static SimpleController controller;
+    private static StatusController controller;
 
     public static void main(String[] args) {
         start();
@@ -29,7 +30,7 @@ public class Gui extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader loader = loadFXML("simple");
+        FXMLLoader loader = loadFXML("status");
         scene = new Scene(loader.getRoot(), 640, 480);
         stage.setScene(scene);
         stage.show();
@@ -46,6 +47,13 @@ public class Gui extends Application {
             controller.appendLogMessage(message);
         }
     }
+
+    public static void plotIO(List<String[]> io) {
+        if (controller != null) {
+            controller.updateIOView(io);
+        }
+    }
+
 
     private static FXMLLoader loadFXML(String fxml) throws IOException {
         FXMLLoader loader = new FXMLLoader(Gui.class.getResource("fxml/" + fxml + ".fxml"));

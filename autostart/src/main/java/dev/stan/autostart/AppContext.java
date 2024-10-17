@@ -2,8 +2,17 @@ package dev.stan.autostart;
 
 import com.pi4j.Pi4J;
 import com.pi4j.context.Context;
+import com.pi4j.io.gpio.digital.DigitalInput;
+import com.pi4j.io.gpio.digital.DigitalOutput;
+import com.pi4j.registry.Registry;
+import org.slf4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class AppContext {
+    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(AppContext.class);
     private static AppContext context;
 
     private final Context pi4JContext;
@@ -48,5 +57,34 @@ public class AppContext {
 
     public long getMsecs() {
         return msecs;
+    }
+
+    public List<String[]> getIO() {
+        Registry pi4JRegistry = pi4JContext.registry();
+        Map io = pi4JRegistry.all();
+        List<String[]> ioList = new ArrayList<>();
+
+
+        io.forEach((name, v) -> {
+            if (v instanceof DigitalOutput) {
+                DigitalOutput output = (DigitalOutput) v;
+                ioList.add(new String[]{
+                        "output",
+                        String.valueOf(output.address()),
+                        String.valueOf(output.state()) == "LOW" ? "0" : "1",
+                        (String) name
+                });
+            } else if (v instanceof DigitalInput) {
+                DigitalInput input = (DigitalInput) v;
+                ioList.add(new String[]{
+                        "input",
+                        String.valueOf(input.address()),
+                        String.valueOf(input.state()) == "LOW" ? "0" : "1",
+                        (String) name
+                });
+            }
+        });
+
+        return ioList;
     }
 }

@@ -1,5 +1,8 @@
 package dev.stan.gui;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,13 +13,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 
-public class SimpleController {
-    private static final Logger logger = LoggerFactory.getLogger(SimpleController.class);
+import java.util.List;
+
+public class StatusController {
+    private static final Logger logger = LoggerFactory.getLogger(StatusController.class);
 
     @FXML private TextArea logTextArea;
     @FXML private TextArea statusTextArea;
     @FXML private TableView<String> sysParamsableView;
-    @FXML private TableView<String> pinsTableView;
+    @FXML private ListView<String> ioListView;
     @FXML private LineChart<String, Number> chart;
 
     @FXML
@@ -27,6 +32,20 @@ public class SimpleController {
     @FXML
     private void onClick(MouseEvent event) {
         logger.info("Button clicked", event);
+    }
+
+    public void updateIOView(List<String[]> io) {
+        Platform.runLater(() -> {
+            ioListView.getItems().clear();
+            ObservableList<String> items = FXCollections.observableArrayList();
+
+            io.sort((a, b) -> a[0].compareTo(b[0]));
+            for (String[] ioItem : io) {
+                items.add(String.join("\t", ioItem));
+            }
+            ioListView.setItems(items);
+
+        });
     }
 
     public void appendLogMessage(String message) {

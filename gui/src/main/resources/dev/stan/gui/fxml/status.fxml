@@ -3,6 +3,7 @@
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
@@ -12,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.stan.gui.SimpleController">
+<VBox prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.stan.gui.StatusController">
    <children>
       <HBox prefHeight="123.0" prefWidth="1080.0">
          <children>
@@ -35,13 +36,7 @@
                   </HBox>
                </children>
             </StackPane>
-            <TableView fx:id="pinsTableView" prefHeight="392.0" prefWidth="302.0">
-              <columns>
-                  <TableColumn prefWidth="53.60005110502243" text="Pin #" />
-                <TableColumn prefWidth="92.79999160766602" text="Function" />
-                  <TableColumn prefWidth="155.1999969482422" text="Status" />
-              </columns>
-            </TableView>
+            <ListView fx:id="ioListView" prefHeight="392.0" prefWidth="371.0" />
             <LineChart fx:id="lineChart">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
