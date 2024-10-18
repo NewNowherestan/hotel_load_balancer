@@ -20,13 +20,14 @@ public class AppContext {
     private long secs;
     private long msecs;
 
+    public final int allowedAttempts = 4;
+    public int attempts = 0;
+
     public boolean isStarterRunning = false;
     public boolean isGeneratorWorking = false;
     public boolean isMainsPresent = false;
     public boolean isValveOpen = false;
     public boolean isValveOnBattery = false;
-
-    public int attempts = 0;
 
     private AppContext(Context pi4JContext) {
         this.pi4JContext = pi4JContext;

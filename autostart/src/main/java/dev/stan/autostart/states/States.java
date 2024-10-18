@@ -1,0 +1,15 @@
+package dev.stan.autostart.states;
+
+public enum States {
+    ERROR_MAX_RETRIES,
+
+    GENERATOR_IDLE,
+    GENERATOR_STARTING,
+    GENERATOR_RUNNING,
+    GENERATOR_STOPPING,
+
+    STARTER_SPINNING,
+    STARTER_COOLDOWN,
+
+    GAS_PREFLOW;
+}

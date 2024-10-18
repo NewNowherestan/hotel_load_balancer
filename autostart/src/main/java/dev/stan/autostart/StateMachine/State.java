@@ -1,5 +1,7 @@
 package dev.stan.autostart.StateMachine;
 
+import dev.stan.autostart.AppContext;
+
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -7,6 +9,7 @@ public abstract class State {
     protected StateMachine stateMachine;
     private Map<String, Method> entryHandlers;
     protected State parentState;
+    protected AppContext appContext = AppContext.getContext();
 
     public State(StateMachine stateMachine, State parentState) {
         this.stateMachine = stateMachine;
