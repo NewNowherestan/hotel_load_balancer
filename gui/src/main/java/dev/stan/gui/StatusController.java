@@ -98,6 +98,10 @@ public class StatusController {
             int endIndex = line.lastIndexOf(")");
             int count = Integer.parseInt(line.substring(startIndex, endIndex));
             count++;
+            if (count >= Integer.MAX_VALUE) {
+                count = Integer.MAX_VALUE;
+            }
+
             return line.substring(0, startIndex - 2) + "(x" + count + ")";
         } else {
             return line + " (x2)";

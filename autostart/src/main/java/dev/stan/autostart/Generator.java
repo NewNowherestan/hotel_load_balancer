@@ -9,20 +9,13 @@ import static dev.stan.autostart.PinState.*;
 public class Generator {
     private static final Logger logger = LoggerFactory.getLogger(Generator.class);
 
-    private static final long generatorCooldownDelaySecs = 10;
 
     private final AppContext appContext;
     private final Starter starter = new Starter();
 
-    private static final long gasValveOpenDelaySecs = 5;
+    private static final long generatorCooldownDelaySecs = 10;
+
     private static long generatorCooldownStartedTimestampSecs = 0;
-    private static long gasValveOpenOnStarttimestampSecs = 0;
-
-    private final long starterPauseDelaySecs = 20;
-    private static final long starterActiveDelaySecs = 10;
-
-    private long starterPauseStartedTimestampSecs = 0;
-    private static long starterEnabledTimestampSecs = 0;
 
     public Generator(AppContext appContext) {
         this.appContext = appContext;
@@ -34,14 +27,14 @@ public class Generator {
 
 
         // if first attempt, let gas flow for a while
-        if (appContext.attempts == 0 && gasValveOpenOnStarttimestampSecs == 0) {
-            gasValveOpenOnStarttimestampSecs = appContext.getSecs();
+        if (appContext.attempts == 0 && !Delay.GAS_PREFLOW.isStarted()) {
+            Delay.GAS_PREFLOW.start();
         }
 
-        if (appContext.getSecs() - gasValveOpenOnStarttimestampSecs >= gasValveOpenDelaySecs) {
+        if (Delay.GAS_PREFLOW.isElapsed()) {
             starter.runStarter();
         } else {
-            logger.info("Waiting for gas to flow. Seconds left: " + (gasValveOpenDelaySecs - (appContext.getSecs() - gasValveOpenOnStarttimestampSecs)));
+            logger.info("Waiting for gas to flow. Seconds left: " + Delay.GAS_PREFLOW.secondsLeft());
         }
         starter.check();
     }
@@ -90,16 +83,16 @@ public class Generator {
                 starter.stopStarter();
                 appContext.attempts = 0;
                 powerValveFromBattery(false);
-            } else if (appContext.getSecs() - starterEnabledTimestampSecs >= starterActiveDelaySecs) {
+            } else if (Delay.STARTER_ACTIVE_CYCLE.isElapsed()) {
                 logger.error("Generator start failed");
 
                 starter.stopStarter();
                 appContext.attempts++;
 
                 enableValve(false);
-                starterPauseStartedTimestampSecs = appContext.getSecs();
+                Delay.STARTER_COOLDOWN.start();
 
-                logger.info("Starting pause before next attempt. Seconds left: " + starterPauseDelaySecs);
+                logger.info("Starting pause before next attempt. Seconds left: " + Delay.STARTER_COOLDOWN.secondsLeft());
             }
         }
 
@@ -112,18 +105,18 @@ public class Generator {
             logger.info("Running starter");
 
             if (appContext.isStarterRunning) {
-                logger.info("Starter started. Seconds to run: " + (starterActiveDelaySecs - (appContext.getSecs() - starterEnabledTimestampSecs)));
+                logger.info("Starter started. Seconds to run: " + Delay.STARTER_ACTIVE_CYCLE.secondsLeft());
 
-            } else if (appContext.getSecs() - starterPauseStartedTimestampSecs >= starterPauseDelaySecs) {
+            } else if (Delay.STARTER_COOLDOWN.isElapsed()) {
                 STARTER_RELAY.set(HIGH);
 
-                starterEnabledTimestampSecs = appContext.getSecs();
+                Delay.STARTER_ACTIVE_CYCLE.start();
                 appContext.isStarterRunning = true;
 
                 logger.info("Starter started");
 
             } else {
-                logger.info("Waiting for starter cooldown to end. Seconds left: " + (starterPauseDelaySecs - (appContext.getSecs() - starterPauseStartedTimestampSecs)));
+                logger.info("Waiting for starter cooldown to end. Seconds left: " + Delay.STARTER_COOLDOWN.secondsLeft());
             }
 
         }
@@ -133,8 +126,8 @@ public class Generator {
 
             STARTER_RELAY.set(LOW);
 
-            starterEnabledTimestampSecs = 0;
-            gasValveOpenOnStarttimestampSecs = 0;
+            Delay.STARTER_ACTIVE_CYCLE.reset();
+            Delay.GAS_PREFLOW.reset();
 
             appContext.isStarterRunning = false;
         }
